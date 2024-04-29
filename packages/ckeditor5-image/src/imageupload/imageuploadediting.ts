@@ -236,6 +236,7 @@ export default class ImageUploadEditing extends Plugin {
 
 			this.editor.model.change( writer => {
 				writer.setAttribute( 'src', urls.default, imageElement );
+				writer.setAttribute( 'width', data.width, imageElement);
 				this._parseAndSetSrcsetAttributeOnImage( urls, imageElement, writer );
 				imageUtils.setImageNaturalSizeAttributes( imageElement );
 			} );

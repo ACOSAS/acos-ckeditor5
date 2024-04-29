@@ -6,6 +6,7 @@
 .ck .ck-widget_with-resizer {
 	/* Make the widget wrapper a relative positioning container for the drag handle. */
 	position: relative;
+	max-width: 600px !important;
 }
 
 .ck .ck-widget__resizer {

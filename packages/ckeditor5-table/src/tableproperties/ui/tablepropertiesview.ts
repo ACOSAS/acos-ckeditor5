@@ -45,11 +45,11 @@ import '../../../theme/tableproperties.css';
 import type ColorInputView from '../../ui/colorinputview.js';
 import type { TablePropertiesOptions } from '../../tableconfig.js';
 
-const ALIGNMENT_ICONS = {
-	left: icons.objectLeft,
-	center: icons.objectCenter,
-	right: icons.objectRight
-};
+// const ALIGNMENT_ICONS = {
+// 	left: icons.objectLeft,
+// 	center: icons.objectCenter,
+// 	right: icons.objectRight
+// };
 
 /**
  * Additional configuration of the view.
@@ -193,7 +193,7 @@ export default class TablePropertiesView extends View {
 	/**
 	 * A toolbar with buttons that allow changing the alignment of an entire table.
 	 */
-	public readonly alignmentToolbar: ToolbarView;
+	// public readonly alignmentToolbar: ToolbarView;
 
 	/**
 	 * The "Save" button view.
@@ -237,7 +237,7 @@ export default class TablePropertiesView extends View {
 		const { borderStyleDropdown, borderWidthInput, borderColorInput, borderRowLabel } = this._createBorderFields();
 		const { backgroundRowLabel, backgroundInput } = this._createBackgroundFields();
 		const { widthInput, operatorLabel, heightInput, dimensionsLabel } = this._createDimensionFields();
-		const { alignmentToolbar, alignmentLabel } = this._createAlignmentFields();
+		// const { alignmentToolbar, alignmentLabel } = this._createAlignmentFields();
 
 		this.focusTracker = new FocusTracker();
 		this.keystrokes = new KeystrokeHandler();
@@ -249,7 +249,7 @@ export default class TablePropertiesView extends View {
 		this.backgroundInput = backgroundInput;
 		this.widthInput = widthInput;
 		this.heightInput = heightInput;
-		this.alignmentToolbar = alignmentToolbar;
+		// this.alignmentToolbar = alignmentToolbar;
 
 		// Defer creating to make sure other fields are present and the Save button can
 		// bind its #isEnabled to their error messages so there's no way to save unless all
@@ -311,16 +311,16 @@ export default class TablePropertiesView extends View {
 						heightInput
 					],
 					class: 'ck-table-form__dimensions-row'
-				} ),
-				// Alignment row.
-				new FormRowView( locale, {
-					labelView: alignmentLabel,
-					children: [
-						alignmentLabel,
-						alignmentToolbar
-					],
-					class: 'ck-table-properties-form__alignment-row'
 				} )
+				// Alignment row.
+				// new FormRowView( locale, {
+				// 	labelView: alignmentLabel,
+				// 	children: [
+				// 		alignmentLabel,
+				// 		alignmentToolbar
+				// 	],
+				// 	class: 'ck-table-properties-form__alignment-row'
+				// } )
 			]
 		} ) );
 
@@ -381,7 +381,7 @@ export default class TablePropertiesView extends View {
 			this.backgroundInput,
 			this.widthInput,
 			this.heightInput,
-			this.alignmentToolbar,
+			//this.alignmentToolbar,
 			this.saveButtonView,
 			this.cancelButtonView
 		].forEach( view => {
@@ -642,37 +642,37 @@ export default class TablePropertiesView extends View {
 	 *
 	 * * {@link #alignmentToolbar}.
 	 */
-	private _createAlignmentFields() {
-		const locale = this.locale;
-		const t = this.t!;
+	// private _createAlignmentFields() {
+	// 	const locale = this.locale;
+	// 	const t = this.t!;
 
-		// -- Label ---------------------------------------------------
+	// 	// -- Label ---------------------------------------------------
 
-		const alignmentLabel = new LabelView( locale );
-		alignmentLabel.text = t( 'Alignment' );
+	// 	const alignmentLabel = new LabelView( locale );
+	// 	alignmentLabel.text = t( 'Alignment' );
 
-		// -- Toolbar ---------------------------------------------------
+	// 	// -- Toolbar ---------------------------------------------------
 
-		const alignmentToolbar = new ToolbarView( locale! );
-		alignmentToolbar.set( {
-			isCompact: true,
-			ariaLabel: t( 'Table alignment toolbar' )
-		} );
+	// 	const alignmentToolbar = new ToolbarView( locale! );
+	// 	alignmentToolbar.set( {
+	// 		isCompact: true,
+	// 		ariaLabel: t( 'Table alignment toolbar' )
+	// 	} );
 
-		fillToolbar( {
-			view: this,
-			icons: ALIGNMENT_ICONS,
-			toolbar: alignmentToolbar,
-			labels: this._alignmentLabels,
-			propertyName: 'alignment',
-			defaultValue: this.options.defaultTableProperties.alignment!
-		} );
+	// 	fillToolbar( {
+	// 		view: this,
+	// 		icons: ALIGNMENT_ICONS,
+	// 		toolbar: alignmentToolbar,
+	// 		labels: this._alignmentLabels,
+	// 		propertyName: 'alignment',
+	// 		defaultValue: this.options.defaultTableProperties.alignment!
+	// 	} );
 
-		return {
-			alignmentLabel,
-			alignmentToolbar
-		};
-	}
+	// 	return {
+	// 		alignmentLabel,
+	// 		alignmentToolbar
+	// 	};
+	// }
 
 	/**
 	 * Creates the following form controls:
@@ -726,21 +726,21 @@ export default class TablePropertiesView extends View {
 	/**
 	 * Provides localized labels for {@link #alignmentToolbar} buttons.
 	 */
-	private get _alignmentLabels() {
-		const locale = this.locale!;
-		const t = this.t!;
+	// private get _alignmentLabels() {
+	// 	const locale = this.locale!;
+	// 	const t = this.t!;
 
-		const left = t( 'Align table to the left' );
-		const center = t( 'Center table' );
-		const right = t( 'Align table to the right' );
+	// 	const left = t( 'Align table to the left' );
+	// 	const center = t( 'Center table' );
+	// 	const right = t( 'Align table to the right' );
 
-		// Returns object with a proper order of labels.
-		if ( locale.uiLanguageDirection === 'rtl' ) {
-			return { right, center, left };
-		} else {
-			return { left, center, right };
-		}
-	}
+	// 	// Returns object with a proper order of labels.
+	// 	if ( locale.uiLanguageDirection === 'rtl' ) {
+	// 		return { right, center, left };
+	// 	} else {
+	// 		return { left, center, right };
+	// 	}
+	// }
 }
 
 function isBorderStyleSet( value: string ) {

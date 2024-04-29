@@ -20,6 +20,11 @@
 		@mixin ck-focus-ring;
 		@mixin ck-box-shadow var(--ck-inner-shadow);
 	}
+
+	&:hover {
+		@mixin ck-focus-ring;
+		@mixin ck-box-shadow var(--ck-inner-shadow);
+	}
 }
 
 .ck.ck-editor__editable_inline {

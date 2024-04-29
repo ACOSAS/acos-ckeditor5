@@ -7,3 +7,25 @@
 @import "./_zindex.css";
 @import "./_transition.css";
 @import "./_poweredby.css";
+
+.ck ol { list-style: decimal; }
+.ck ol ol { list-style: lower-alpha; }
+.ck ol ol ol { list-style: lower-roman; }
+.ck ol ol ol ol { list-style: decimal; }
+.ck ol ol ol ol ol { list-style: lower-alpha; }
+.ck ol ol ol ol ol ol { list-style: lower-roman; }
+.ck ol ol ol ol ol ol ol { list-style: decimal; }
+.ck ol ol ol ol ol ol ol ol { list-style: lower-alpha; }
+.ck ol ol ol ol ol ol ol ol ol { list-style: lower-roman; }
+.ck ol ol ol ol ol ol ol ol ol ol { list-style: none; }
+
+.ck ul { list-style: disc; }
+.ck ul ul { list-style: circle }
+.ck ul ul ul { list-style: square; }
+.ck ul ul ul ul { list-style: disc; }
+.ck ul ul ul ul ul { list-style: circle; }
+.ck ul ul ul ul ul ul { list-style: square; }
+.ck ul ul ul ul ul ul ul { list-style: disc; }
+.ck ul ul ul ul ul ul ul ul { list-style: circle; }
+.ck ul ul ul ul ul ul ul ul ul { list-style: square; }
+.ck ul ul ul ul ul ul ul ul ul ul { list-style: none; }
