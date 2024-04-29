@@ -1,0 +1,23 @@
+li.stdtext > ul {
+    padding-left: 20px !important;
+}
+
+li.stdtext {
+    overflow: hidden !important;
+}
+
+.stdtext {
+    &.actionBtn {
+        padding: 5px 10px 5px 10px !important;
+        display: block !important;    
+    }
+
+    &.actionBtn:hover {
+        background: rgb(240,240,240) !important;
+        cursor: pointer !important;
+    }
+
+    &.hidden {
+        display: none;
+    }
+}

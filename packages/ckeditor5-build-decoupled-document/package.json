@@ -72,6 +72,7 @@
   },
   "scripts": {
     "build": "webpack --mode production",
-    "postbuild": "tsc -p ./tsconfig.types.json"
+    "_postbuild": "tsc -p ./tsconfig.types.json",
+    "postbuild": "copy build\\ckeditor.js ..\\..\\..\\Mote\\Acos.Mote\\Acos.Mote.Pluss.Web\\src\\app\\core && copy build\\ckeditor.js ..\\..\\..\\Mote\\Acos.Mote\\Acos.Mote.Web.Angular\\src\\app\\acos-mote-plugins\\ckeditor && copy build\\ckeditor.js ..\\..\\..\\Moteportal\\acos-moteportal\\Acos.Moteportal.Web.Angular\\src\\app\\utils"
   }
 }

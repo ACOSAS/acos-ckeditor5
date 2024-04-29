@@ -30,18 +30,19 @@ module.exports = {
 	},
 
 	optimization: {
-		minimizer: [
-			new TerserPlugin( {
-				sourceMap: true,
-				terserOptions: {
-					output: {
-						// Preserve CKEditor 5 license comments.
-						comments: /^!/
-					}
-				},
-				extractComments: false
-			} )
-		]
+		minimize: false,
+		// minimizer: [
+		// 	new TerserPlugin( {
+		// 		sourceMap: true,
+		// 		terserOptions: {
+		// 			output: {
+		// 				// Preserve CKEditor 5 license comments.
+		// 				comments: /^!/
+		// 			}
+		// 		},
+		// 		extractComments: false
+		// 	} )
+		// ]
 	},
 
 	plugins: [
