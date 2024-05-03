@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
@@ -30,35 +31,37 @@ import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { Comments } from '@ckeditor/ckeditor5-comments';
 import { TrackChanges } from '@ckeditor/ckeditor5-track-changes';
-import Standardtekster from '../src/plugins/standardtekster/standardtekster.ts';
-import Fullscreen from '../src/plugins/fullscreen/fullscreen.ts';
-import PasteImage from '../src/plugins/pasteimage/pasteimage.ts';
-import Save from '../src/plugins/save/save.ts';
+import Standardtekster from '../src/plugins/standardtekster/standardtekster';
+import Fullscreen from '../src/plugins/fullscreen/fullscreen';
+import PasteImage from '../src/plugins/pasteimage/pasteimage';
+import Save from '../src/plugins/save/save';
 import { Base64UploadAdapter } from '@ckeditor/ckeditor5-upload';
-import { EditorConfig } from '@ckeditor/ckeditor5-core';
 
 export default class DecoupledEditor extends DecoupledEditorBase {
 
 	isInSetData: boolean = false;
-	standardTekster: any[];
-	fullscreenHandler: any;
-	saveHandler: any;
+	setDataFirstRun: boolean = false;
 
-	constructor(sourceElementOrData: HTMLElement | string, config: EditorConfig) {
+	standardTekster: any;
+	fullscreenHandler: any;
+	saveHandler: any;	
+
+	constructor(sourceElementOrData, config) {
 		super(sourceElementOrData, config);
 		this.set('hasChanges', false);
-		this.model.document.on('change:data', () => {
-			if (this.isInSetData === false) {
+		this.model.document.on('change:data', evt => {		
+			if (this.setDataFirstRun && !this.isInSetData) {
 				this.set('hasChanges', true);
 			}
 		});
 	}
 
-	public override setData( data: string | Record<string, string> ): void {
+	setData(data) {
 		this.isInSetData = true;
 		const html = this.convertBase64ImagesToBlob(data);
 		super.setData(html);
 		this.isInSetData = false;
+		this.setDataFirstRun = true;
 	}
 
 	async getData() {
@@ -91,7 +94,7 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 		return doc.body.innerHTML;
 	}
 
-	settStandardTekster(mapper: any[]) {
+	settStandardTekster(mapper: any) {
 		this.standardTekster = mapper;
 		this.set('harStandardTekster', mapper && mapper.length > 0);
 	}
@@ -124,10 +127,14 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 	}
 
 	removeTableFigureNode(table) {
-		table.style.maxWidth = '600px';
-
 		let figureNode = table.parentNode;
 		if (figureNode && figureNode.tagName.toLowerCase() == 'figure') {
+			const width = this.getFigureWidth(figureNode);
+
+			console.log(width);
+
+			table.style.width = width;
+
 			let figureParent = figureNode.parentNode;
 
 			if (figureParent) {
@@ -136,6 +143,29 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 				figureParent.removeChild(figureNode);
 			}
 		}
+	}
+
+	getFigureWidth(figureNode: any): string {
+		const figureWidth = figureNode.style.getPropertyValue("width");
+
+		if (figureWidth.endsWith('px')) {
+			return figureWidth;
+		} else if (figureWidth.endsWith('%')) {
+			const percentString = figureWidth.replace('%', '');
+
+			if (Number.isFinite(+percentString)) {
+				const percent = Number.parseFloat(+percentString);
+				const clientRect = this.sourceElement.getBoundingClientRect();
+	
+				let width = (clientRect.width * percent / 100);
+	
+				width = Math.min(600, width);
+				
+				return width + 'px';
+			}
+		}
+
+		return '';		
 	}
 
 	downloadData(url) {
@@ -318,7 +348,7 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 			'|', 'imageUpload', 'insertTable', 'standardtekster',
 			'|', 'heading',
 			'|', 'undo', 'redo',
-			'|', 'trackChanges', 'comment'
+			'|', 'trackChanges', 'comment', 'commentsArchive'
 			]
 		},
 		image: {

@@ -21,6 +21,7 @@
 .ck .ck-widget.ck-widget_with-selection-handle {
 	/* Make the widget wrapper a relative positioning container for the drag handle. */
 	position: relative;
+	max-width: 600px !important;
 
 	& .ck-widget__selection-handle {
 		position: absolute;
