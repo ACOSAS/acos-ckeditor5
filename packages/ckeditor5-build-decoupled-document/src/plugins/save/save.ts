@@ -63,10 +63,19 @@ export default class Save extends Plugin {
 
     async execute() {
         if (this.editor.saveHandler) {
-            const data = await this.editor.getData();
-            const saved = await this.editor.saveHandler(data);
-            this.editor.set("hasChanges", !saved);
-            this.refresh();
+            this.isEnabled = false;
+
+            try {
+                const data = await this.editor.getData();
+                const saved = await this.editor.saveHandler(data);
+                this.editor.set("hasChanges", !saved);
+                this.isEnabled = !saved;
+                this.refresh();
+            } catch (error) {
+                console.error('Failed executing saveHandler', error);
+                this.isEnabled = true;
+                throw error;
+            }     
         }
     }
 
