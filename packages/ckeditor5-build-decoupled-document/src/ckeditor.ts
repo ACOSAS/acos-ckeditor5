@@ -39,29 +39,22 @@ import { Base64UploadAdapter } from '@ckeditor/ckeditor5-upload';
 
 export default class DecoupledEditor extends DecoupledEditorBase {
 
-	isInSetData: boolean = false;
-	setDataFirstRun: boolean = false;
-
 	standardTekster: any;
 	fullscreenHandler: any;
 	saveHandler: any;	
 
 	constructor(sourceElementOrData, config) {
 		super(sourceElementOrData, config);
-		this.set('hasChanges', false);
-		this.model.document.on('change:data', evt => {		
-			if (this.setDataFirstRun && !this.isInSetData) {
+		this.model.document.on('change:data', (evt, batch) => {		
+			if (batch.isUndoable) {
 				this.set('hasChanges', true);
-			}
+			}		
 		});
 	}
 
-	setData(data) {
-		this.isInSetData = true;
+	override setData(data) {		
 		const html = this.convertBase64ImagesToBlob(data);
 		super.setData(html);
-		this.isInSetData = false;
-		this.setDataFirstRun = true;
 	}
 
 	async getData() {
