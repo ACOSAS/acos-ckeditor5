@@ -248,10 +248,11 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 		const imgMime = 'image/jpeg';
 	
 		const canvasImg = await new Promise(function (resolve, reject) {
-			const canvasImg = new Image();
+			const canvasImg = new window.Image();
 			canvasImg.addEventListener('load', function () {
 				resolve(canvasImg);
 			});
+			canvasImg.setAttribute('crossOrigin', 'anonymous');
 			canvasImg.addEventListener('error', reject);
 			canvasImg.src = img.src;
 			return canvasImg;
@@ -274,8 +275,8 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 	
 		const url = URL.createObjectURL(blob);
 		img.src = url;
-		img.style.width = '';
-		img.style.height = '';
+		img.style.width = showWidth + 'px';
+		img.style.height = showHeight + 'px';
 		img.width = showWidth;
 		img.height = showHeight;
 	}

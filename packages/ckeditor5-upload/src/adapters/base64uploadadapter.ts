@@ -79,7 +79,7 @@ class Adapter implements UploadAdapter {
 				img.src = reader.result != null ? reader.result.toString() : '';
 				
 				this.resizeBase64ImageAsync( img ).then( function() {
-                    resolve( { default: img.src, width: img.width + 'px' } );
+                    resolve( { default: img.src, width: img.width + 'px', height: img.height + 'px' } );
                 } );
 			} );
 
@@ -113,7 +113,7 @@ class Adapter implements UploadAdapter {
 		const imgMime = 'image/jpeg';
 
 		const canvasImg: any = await new Promise(function (resolve, reject) {
-			const canvasImg = new Image();
+			const canvasImg = new window.Image();
 			canvasImg.addEventListener('load', function () {
 				resolve(canvasImg);
 			});
@@ -137,10 +137,10 @@ class Adapter implements UploadAdapter {
 			canvas.toBlob(resolve, imgMime, quality);
 		});
 
-		const url = URL.createObjectURL((blob as Blob));
+		const url = URL.createObjectURL(blob as Blob);
 		img.src = url;
-		img.style.width = '';
-		img.style.height = '';
+		img.style.width = showWidth + 'px';
+		img.style.height = showHeight + 'px';
 		img.width = showWidth;
 		img.height = showHeight;
 	}
