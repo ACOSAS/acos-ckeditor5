@@ -45,11 +45,28 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 
 	constructor(sourceElementOrData, config) {
 		super(sourceElementOrData, config);
-		this.model.document.on('change:data', (evt, batch) => {		
+		this.model.document.on('change:data', (evt, batch) => {
 			if (batch.isUndoable) {
 				this.set('hasChanges', true);
-			}		
+			}
 		});
+
+		this.on('ready', () => {
+			const commentsRepo = this.plugins.get('CommentsRepository');
+
+			if (commentsRepo) {
+				commentsRepo.on('addComment', evt => this.setChanged());
+				commentsRepo.on('updateComment', evt => this.setChanged());
+				commentsRepo.on('removeComment', evt => this.setChanged());
+				commentsRepo.on('resolveCommentThread', evt => this.setChanged());
+				commentsRepo.on('removeCommentThread', evt => this.setChanged());
+				commentsRepo.on('reopenCommentThread', evt => this.setChanged());
+			}
+		});
+	}
+
+	setChanged() {
+		this.set('hasChanges', true);
 	}
 
 	override setData(data) {		
@@ -342,7 +359,7 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 			'|', 'imageUpload', 'insertTable', 'standardtekster',
 			'|', 'heading',
 			'|', 'undo', 'redo',
-			'|', 'trackChanges', 'comment', 'commentsArchive'
+			'|', 'trackChanges', 'comment'
 			]
 		},
 		image: {
