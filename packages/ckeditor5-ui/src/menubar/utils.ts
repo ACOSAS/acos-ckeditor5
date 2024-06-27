@@ -7,7 +7,6 @@
  * @module ui/menubar/utils
  */
 
-import clickOutsideHandler from '../bindings/clickoutsidehandler.js';
 import MenuBarMenuListItemView from './menubarmenulistitemview.js';
 import type MenuBarMenuView from './menubarmenuview.js';
 import type {
@@ -24,16 +23,18 @@ import type {
 	MenuBarConfigAddedPosition,
 	NormalizedMenuBarConfigObject
 } from './menubarview.js';
-import { cloneDeep } from 'lodash-es';
+import clickOutsideHandler from '../bindings/clickoutsidehandler.js';
+import type { ButtonExecuteEvent } from '../button/button.js';
+import type ComponentFactory from '../componentfactory.js';
 import type { FocusableView } from '../focuscycler.js';
+import type { Editor } from '@ckeditor/ckeditor5-core';
 import {
 	logWarning,
 	type Locale,
 	type ObservableChangeEvent,
 	type PositioningFunction
 } from '@ckeditor/ckeditor5-utils';
-import type { ButtonExecuteEvent } from '../button/button.js';
-import type ComponentFactory from '../componentfactory.js';
+import { cloneDeep } from 'lodash-es';
 
 const NESTED_PANEL_HORIZONTAL_OFFSET = 5;
 
@@ -503,7 +504,7 @@ export const MenuBarMenuViewPanelPositioningFunctions: Record<string, Positionin
  * 			{
  * 				groupId: 'insertMainWidgets',
  * 				items: [
- * 					'menuBar:uploadImage',
+ * 					'menuBar:insertImage',
  * 					'menuBar:ckbox',
  * 					'menuBar:ckfinder',
  * 					'menuBar:insertTable'
@@ -519,6 +520,7 @@ export const MenuBarMenuViewPanelPositioningFunctions: Record<string, Positionin
  * 			{
  * 				groupId: 'insertMinorWidgets',
  * 				items: [
+ * 					'menuBar:mediaEmbed',
  * 					'menuBar:insertTemplate',
  * 					'menuBar:blockQuote',
  * 					'menuBar:codeBlock',
@@ -606,6 +608,7 @@ export const MenuBarMenuViewPanelPositioningFunctions: Record<string, Positionin
  * 				items: [
  * 					'menuBar:bulletedList',
  * 					'menuBar:numberedList',
+ * 					'menuBar:multiLevelList',
  * 					'menuBar:todoList'
  * 				]
  * 			},
@@ -751,7 +754,7 @@ export const DefaultMenuBarItems: DeepReadonly<MenuBarConfigObject[ 'items' ]> =
 			{
 				groupId: 'insertMainWidgets',
 				items: [
-					'menuBar:uploadImage',
+					'menuBar:insertImage',
 					'menuBar:ckbox',
 					'menuBar:ckfinder',
 					'menuBar:insertTable'
@@ -767,6 +770,7 @@ export const DefaultMenuBarItems: DeepReadonly<MenuBarConfigObject[ 'items' ]> =
 			{
 				groupId: 'insertMinorWidgets',
 				items: [
+					'menuBar:mediaEmbed',
 					'menuBar:insertTemplate',
 					'menuBar:blockQuote',
 					'menuBar:codeBlock',
@@ -854,6 +858,7 @@ export const DefaultMenuBarItems: DeepReadonly<MenuBarConfigObject[ 'items' ]> =
 				items: [
 					'menuBar:bulletedList',
 					'menuBar:numberedList',
+					'menuBar:multiLevelList',
 					'menuBar:todoList'
 				]
 			},
@@ -895,7 +900,6 @@ export const DefaultMenuBarItems: DeepReadonly<MenuBarConfigObject[ 'items' ]> =
 				items: [
 					'menuBar:trackChanges',
 					'menuBar:commentsArchive'
-
 				]
 			}
 		]
@@ -1471,3 +1475,34 @@ function getIdFromGroupItem( item: string | MenuBarMenuDefinition ): string {
 function isMenuDefinition( definition: any ): definition is MenuBarMenuDefinition {
 	return typeof definition === 'object' && 'menuId' in definition;
 }
+
+/**
+ * Initializes menu bar for given editor.
+ *
+ * @internal
+ */
+export function _initMenuBar( editor: Editor, menuBarView: MenuBarView ): void {
+	const menuBarViewElement = menuBarView.element!;
+
+	editor.ui.focusTracker.add( menuBarViewElement );
+	editor.keystrokes.listenTo( menuBarViewElement );
+
+	const normalizedMenuBarConfig = normalizeMenuBarConfig( editor.config.get( 'menuBar' ) || {} );
+
+	menuBarView.fillFromConfig( normalizedMenuBarConfig, editor.ui.componentFactory );
+
+	editor.keystrokes.set( 'Esc', ( data, cancel ) => {
+		if ( menuBarViewElement.contains( editor.ui.focusTracker.focusedElement ) ) {
+			editor.editing.view.focus();
+			cancel();
+		}
+	} );
+
+	editor.keystrokes.set( 'Alt+F9', ( data, cancel ) => {
+		if ( !menuBarViewElement.contains( editor.ui.focusTracker.focusedElement ) ) {
+			menuBarView!.focus();
+			cancel();
+		}
+	} );
+}
+
