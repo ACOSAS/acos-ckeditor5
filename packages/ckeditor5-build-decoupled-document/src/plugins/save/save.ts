@@ -66,7 +66,7 @@ export default class Save extends Plugin {
             this.isEnabled = false;
 
             try {
-                const data = await this.editor.getData();
+                const data = await this.editor.getData({ignoreResolvedComments: true});
                 const saved = await this.editor.saveHandler(data);
                 this.editor.set("hasChanges", !saved);
                 this.isEnabled = !saved;

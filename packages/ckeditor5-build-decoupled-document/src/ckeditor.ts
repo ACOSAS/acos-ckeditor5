@@ -74,8 +74,12 @@ export default class DecoupledEditor extends DecoupledEditorBase {
 		super.setData(html);
 	}
 
-	async getData() {
-		const html = super.getData();
+	async getData(options?: {
+		rootName?: string;
+		trim?: 'empty' | 'none';
+		[ key: string ]: unknown;
+	}) {
+		const html = super.getData(options);
 
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(html, 'text/html');
